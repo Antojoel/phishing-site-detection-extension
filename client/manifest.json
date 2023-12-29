@@ -1,0 +1,25 @@
+{
+    "manifest_version": 2,
+    "name": "Phishing Checker",
+    "version": "1.0",
+    "description": "Check if the current tab's URL is a phishing link",
+    "permissions": [
+        "tabs",
+        "http://*/*",
+        "https://*/*"
+    ],
+    "browser_action": {
+        "default_icon": "icon.png",
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "content.js"
+            ]
+        }
+    ]
+}
