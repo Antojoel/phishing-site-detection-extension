@@ -1,25 +1,24 @@
 {
     "manifest_version": 2,
-    "name": "Phishing Checker",
+    "name": "URL Analyzer",
     "version": "1.0",
-    "description": "Check if the current tab's URL is a phishing link",
-    "permissions": [
-        "tabs",
-        "http://*/*",
-        "https://*/*"
-    ],
+    "description": "Detect phishing URLs",
+    "permissions": ["activeTab"],
     "browser_action": {
-        "default_icon": "icon.png",
-        "default_popup": "popup.html"
+      "default_icon": "icon.png",
+      "default_popup": "popup.html",
+      "default_title": "Click to analyze the current URL"
     },
-    "content_scripts": [
-        {
-            "matches": [
-                "<all_urls>"
-            ],
-            "js": [
-                "content.js"
-            ]
-        }
-    ]
-}
+    "icons": {
+      "48": "icon.png"
+    },
+    "background": {
+      "scripts": ["background.js"],
+      "persistent": false
+    },
+    "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self';"
+    }
+    
+  }
+  
