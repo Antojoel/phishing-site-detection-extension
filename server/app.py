@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
@@ -7,6 +8,7 @@ import joblib
 import time
 
 app = Flask(__name__)
+CORS(app)
 
 # Load the trained model and vectorizer
 classifier = joblib.load('phishing_model.joblib')
@@ -34,13 +36,22 @@ def predict_url(url):
         print(f"Error during prediction: {e}")
         return "not legitimate"
 
-# API endpoint for prediction
-@app.route('/predict', methods=['POST'])
+# API endpoint for prediction using GET or POST request
+@app.route('/predict', methods=['GET', 'POST'])
 def predict():
-    data = request.get_json(force=True)
-    input_url = data['url']
+    if request.method == 'GET':
+        input_url = request.args.get('url', '')
+        print(input_url)
+
+    elif request.method == 'POST':
+        data = request.get_json(force=True)
+        input_url = data.get('url', '')
+        print(input_url)
+    else:
+        return jsonify({'error': 'Invalid HTTP method'})
+
     result = predict_url(input_url)
     return jsonify({'result': result})
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(port=5001, debug=True)

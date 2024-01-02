@@ -1,12 +1,25 @@
 {
-    "manifest_version": 2,
-    "name": "My Chrome Extension",
-    "version": "1.0",
-    "description": "Description of your extension",
-    "permissions": ["activeTab"],
-    "browser_action": {
-      "default_icon": "icon.png",
-      "default_popup": "popup.html"
+  "manifest_version": 2,
+  "name": "URL Analyzer",
+  "version": "1.0",
+  "description": "Detect phishing URLs",
+  "permissions": ["activeTab"],
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html",
+    "default_title": "Click to analyze the current URL"
+  },
+  "icons": {
+    "48": "icon.png"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["popup.js"]
     }
-  }
-  
+  ]
+}

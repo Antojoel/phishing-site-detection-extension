@@ -1,8 +1,6 @@
-console.log("inside the background.js");
-
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.action === "sendRequest") {
-    fetch('http://127.0.0.1:5000/predict', {
+    fetch('http://127.0.0.1:5001/predict', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -11,11 +9,16 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     })
     .then(response => response.json())
     .then(data => {
-      chrome.tabs.sendMessage(sender.tab.id, { action: "updateResult", result: data.result });
+      // Send the data.result in the response
+      sendResponse({ result: data.result });
     })
     .catch(error => {
       console.error('Error:', error);
-      chrome.tabs.sendMessage(sender.tab.id, { action: "updateResult", result: "Error occurred while predicting." });
+      // Send an error message in the response
+      sendResponse({ error: 'Error occurred while predicting.' });
     });
+    
+    // Ensure to return true to indicate that the sendResponse function will be called asynchronously
+    return true;
   }
 });
